@@ -1,3 +1,28 @@
 #canvas {
     border: 1px solid #ccc;
   }
+  #imageContainer {
+    position: relative;
+    display: inline-block;
+  }
+  
+  #uploadedImage {
+    max-width: 100%;
+  }
+  
+  #cropOverlay {
+    position: absolute;
+    border: 1px dashed #ccc;
+    pointer-events: none;
+  }
+  
+  #cropButton {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
