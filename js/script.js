@@ -1,85 +1,71 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-    var canvas = document.getElementById('canvas');
-    var ctx = canvas.getContext('2d');
     var imageInput = document.getElementById('imageInput');
     var cropButton = document.getElementById('cropButton');
-    var uploadedImage = document.getElementById('uploadedImage');
-    var cropOverlay = document.getElementById('cropOverlay');
+    var downloadButton = document.getElementById('downloadButton');
+    var preview = document.getElementById('preview');
   
-    var isCropping = false;
-    var startX, startY;
+    var cropper;
+    var croppedImage;
   
-    cropButton.addEventListener('click', cropAndDownload);
-    imageInput.addEventListener('change', loadImage);
-  
-    function loadImage(event) {
+    imageInput.addEventListener('change', function(event) {
       var file = event.target.files[0];
       var reader = new FileReader();
   
       reader.onload = function(e) {
-        uploadedImage.src = e.target.result;
-        uploadedImage.onload = function() {
-          canvas.width = uploadedImage.width;
-          canvas.height = uploadedImage.height;
-          ctx.drawImage(uploadedImage, 0, 0);
-        };
-  
-        uploadedImage.style.display = 'block';
-        cropOverlay.style.width = uploadedImage.width + 'px';
-        cropOverlay.style.height = uploadedImage.height + 'px';
+        preview.src = e.target.result;
+        initCropper();
       };
   
       reader.readAsDataURL(file);
+    });
+  
+    function initCropper() {
+      if (cropper) {
+        cropper.destroy();
+      }
+  
+      cropper = new Cropper(preview, {
+        aspectRatio: 1, // Set the aspect ratio as needed
+        viewMode: 1, // Set the view mode as needed (0: free, 1: cropped)
+      });
+  
+      cropButton.disabled = false;
+      downloadButton.disabled = true;
     }
   
-    cropOverlay.addEventListener('mousedown', startCrop);
-    cropOverlay.addEventListener('mousemove', performCrop);
-    cropOverlay.addEventListener('mouseup', endCrop);
+    cropButton.addEventListener('click', function() {
+      croppedImage = cropper.getCroppedCanvas({
+        width: 300, // Set the desired width of the cropped image
+        height: 300, // Set the desired height of the cropped image
+      });
   
-    function startCrop(event) {
-      isCropping = true;
-      startX = event.offsetX;
-      startY = event.offsetY;
-    }
+      downloadButton.disabled = false;
+    });
   
-    function performCrop(event) {
-      if (!isCropping) return;
+    downloadButton.addEventListener('click', function() {
+      // Disable the download button to prevent multiple clicks
+      downloadButton.disabled = true;
+      downloadButton.textContent = 'Downloading...';
   
-      var width = event.offsetX - startX;
-      var height = event.offsetY - startY;
+      // Convert the cropped canvas to a downloadable file
+      croppedImage.toBlob(function(blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'cropped_image.png';
   
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(uploadedImage, 0, 0);
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(startX, startY, width, height);
-    }
+        // Simulate a delay to show the loading state
+        setTimeout(function() {
+          // Trigger the download
+          a.click();
   
-    function endCrop(event) {
-      if (!isCropping) return;
-      isCropping = false;
-  
-      var width = event.offsetX - startX;
-      var height = event.offsetY - startY;
-  
-      var croppedImage = document.createElement('canvas');
-      croppedImage.width = width;
-      croppedImage.height = height;
-      var croppedCtx = croppedImage.getContext('2d');
-      croppedCtx.drawImage(canvas, startX, startY, width, height, 0, 0, width, height);
-  
-      var dataURL = croppedImage.toDataURL('image/png');
-      uploadedImage.src = dataURL;
-    }
-  
-    function cropAndDownload() {
-      var dataURL = uploadedImage.src;
-      var a = document.createElement('a');
-      a.href = dataURL;
-      a.download = 'cropped_image.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+          // Clean up and reset the download button
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          downloadButton.disabled = false;
+          downloadButton.textContent = 'Download Cropped Image';
+        }, 1000); // Adjust the delay time as needed
+      });
+    });
   });
   

@@ -1,28 +1,142 @@
-#canvas {
-    border: 1px solid #ccc;
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f1f1f1;
+    font-family: Arial, sans-serif;
   }
-  #imageContainer {
-    position: relative;
-    display: inline-block;
+
+
+  
+  .container {
+    width: 95vw;
+    height:70vh;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  #uploadedImage {
-    max-width: 100%;
+  .title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
   }
   
-  #cropOverlay {
-    position: absolute;
-    border: 1px dashed #ccc;
-    pointer-events: none;
+  .input-file {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
   }
   
-  #cropButton {
-    margin-top: 10px;
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .button {
     padding: 10px 20px;
     background-color: #4CAF50;
-    color: white;
+    color: #fff;
     border: none;
     border-radius: 4px;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
+  .button:hover {
+    background-color: #45a049;
+  }
+  
+  .button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .preview-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .preview {
+    max-width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cropped-image {
+    display: none;
+  }
+  
+  /* Header */
+  header {
+    background-color: #333;
+    padding: 10px;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  nav li {
+    margin: 0 10px;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .footer-contact, .footer-social {
+    flex-basis: 50%;
+  }
+  
+  .footer-social {
+    text-align: right;
+  }
+  
+  .footer-social ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-social ul li {
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  .footer-social ul li:first-child {
+    margin-left: 0;
+  }
+  
+  .footer-description {
+    margin-top: 20px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 600px) {
+    .container {
+      width: 90%;
+    }
+  }
